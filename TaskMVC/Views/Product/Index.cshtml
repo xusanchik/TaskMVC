@@ -1,0 +1,58 @@
+﻿@model List<TaskMVC.Entity.Product>?;
+
+<style>
+    .user-table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .user-table thead th {
+            padding: 12px;
+            background-color: #f2f2f2;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .user-table tbody td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .user-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .user-table tbody tr:hover {
+            background-color: #ddd;
+        }
+</style>
+
+
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Quantiy</th>
+            <th>Price</th>
+            <th>VAT</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var result in Model)
+        {
+            <tr>
+                <td>@result.Id</td>
+                <td>@result.Title</td>
+                <td>@result.Quantiy</td>
+                <td>@result.Price</td>
+                <td>
+                    @result.TotolPrice
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

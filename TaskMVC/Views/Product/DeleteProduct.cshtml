@@ -1,0 +1,19 @@
+﻿@model TaskMVC.Entity.Product
+
+<body translate="no">
+    <form asp-controller="Product" asp-action="DeleteProduct" method="post" enctype="multipart/form-data" class="col-md-6" style="margin: 5px auto;">
+        <div class="login-box">
+            <h1>Delete </h1>
+            <div class="textbox">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <input name="Id" asp-for="Id" type="text" id="form1-username" placeholder="Id" required>
+            </div>
+            <br />
+            <button asp-controller="Product" asp-action="DeleteProduct" type="submit" class="btn btn-pill btn-outline-info" style="width: 100%;">
+            <i class="fa fa-sign-in mr-1"></i> Delete
+            </button>
+        </div>
+    </form>
+</body>
+
+

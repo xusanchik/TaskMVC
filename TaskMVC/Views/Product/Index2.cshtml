@@ -1,0 +1,173 @@
+﻿@model List<TaskMVC.Entity.Product>?;
+
+
+<style>
+    .user-table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .user-table thead th {
+            padding: 12px;
+            background-color: #f2f2f2;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .user-table tbody td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .user-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .user-table tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        .user-table tbody td button {
+            padding: 5px 10px;
+            margin: 2px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+
+            .user-table tbody td button:hover {
+                background-color: #4CAF50; /* Qizil rang */
+                color:red;
+                border: 1px solid #45a049; /* Engil oq rang */
+            }
+
+
+
+    .user-table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .user-table thead th {
+            padding: 12px;
+            background-color: #f2f2f2;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .user-table tbody td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .user-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .user-table tbody tr:hover {
+            background-color: #ddd;
+        }
+
+
+
+    .head {
+        background-color: #f2f2f2;
+        font-size:20px;
+        text-align:left;
+    }
+
+    form {
+        display: inline-block;
+    }
+
+    /* Style the button */
+    button {
+        background-color: #4CAF50; /* Green background color */
+        color: white; /* White text color */
+        padding: 10px 20px; /* Add some padding to the button */
+        border: none; /* Remove the default border */
+        border-radius: 5px; /* Add a border radius for a slightly rounded appearance */
+        cursor: pointer; /* Change cursor to a pointer on hover */
+    }
+
+
+    /* Style the icon inside the button */
+    .fa {
+        margin-right: 5px; /* Add some space to the right of the icon */
+    }
+
+    /* Change the button color on hover */
+    button:hover {
+        background-color: #45a049;
+    }
+
+    .delete{
+        background-color: red;
+    }
+
+
+</style>
+
+ <div class="head">
+     <form >
+
+      <button asp-controller="Product" asp-action="AddProduct" type="submit">
+         <i class="fa fa-sign-in mr-1"></i> Create
+     </button>
+      
+     </form>
+    <button onclick="location.pathname = 'swagger'">
+        <i class="fa fa-sign-in mr-1"></i> Api
+    </button>
+ </div>
+
+ 
+ 
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Quantiy</th>
+            <th>Price</th>
+            <th>VAT</th>
+            
+            <th> Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        @foreach (var result in Model)
+        {
+            <tr>
+                <td>@result.Id</td>
+                <td>@result.Title</td>
+                <td>@result.Quantiy</td>
+                <td>@result.Price</td>
+                <td>
+                    @result.TotolPrice
+                </td>
+                <td>
+                <form asp-controller="Product" asp-action="Product" enctype="multipart/form-data" class="col-md-6" style="margin: 5px auto;">
+                    <button asp-controller="Product" asp-action="UpdateProduct" type="submit">
+                        @* <input name="Title" value="@result.Title" type="text"/> *@
+                        <i class="fa fa-sign-in mr-1"></i> Update
+                    </button>
+
+                    <button asp-controller="Product" asp-action="DeleteProduct" type="submit" class="delete">
+                        <input name="id" value="@result.Id" type="hidden"/>
+                        <i class="fa fa-sign-in mr-1"></i> Delete
+                    </button>
+                </form>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
