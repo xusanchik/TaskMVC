@@ -107,9 +107,11 @@
     .delete{
         background-color: red;
     }
-
-
+    h1{
+    }
 </style>
+
+<h1>Product</h1>
 
  <div class="head">
      <form >
@@ -117,11 +119,15 @@
       <button asp-controller="Product" asp-action="AddProduct" type="submit">
          <i class="fa fa-sign-in mr-1"></i> Create
      </button>
+        <button asp-controller="AuditViuw" asp-action="Index" type="submit">
+            <i class="fa fa-sign-in mr-1"></i> AuditTable
+        </button>
       
      </form>
     <button onclick="location.pathname = 'swagger'">
         <i class="fa fa-sign-in mr-1"></i> Api
     </button>
+
  </div>
 
  

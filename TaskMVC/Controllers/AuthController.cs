@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using TaskMVC.Dto_s;
 using TaskMVC.Entity;
 using TaskMVC.Service;
@@ -11,18 +12,20 @@ namespace TaskMVC.Controllers
         private readonly AuthService _authService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _singInManager;
+        private readonly IToastNotification _notification;
 
-        public AuthController(AuthService authService, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthController(AuthService authService, UserManager<User> userManager, SignInManager<User> signInManager, IToastNotification notification)
         {
             _authService = authService;
             _singInManager = signInManager;
             _userManager = userManager;
+            _notification = notification;
         }
 
         public IActionResult Login()
         {
-            var response = new LoginDto();
-            return View(response);
+            //var response = new LoginDto();
+            return View();
         }
 
         [HttpPost]
@@ -31,6 +34,10 @@ namespace TaskMVC.Controllers
             if (!ModelState.IsValid)
             {
                 return View(loginDto);
+            }
+            if(loginDto.Email == null)
+            {
+                return RedirectToAction("Login", "Auth");
             }
 
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -47,10 +54,12 @@ namespace TaskMVC.Controllers
                         {
                             if (rolle == "ADMIN")
                             {
+                                _notification.AddSuccessToastMessage("ADMIN!");
                                 return RedirectToAction("Index2", "Product");
                             }
                             if (rolle == "USER")
                             {
+                                
                                 return RedirectToAction("Index", "Product");
 
                             }

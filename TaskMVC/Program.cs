@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NToastNotify;
 using TaskMVC.Data;
 using TaskMVC.Entity;
 using TaskMVC.Interface;
@@ -33,12 +34,16 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
-
+builder.Services.AddRazorPages().AddNToastNotifyNoty(new NotyOptions
+{
+    ProgressBar = true,
+    Timeout = 3000
+});
 var app = builder.Build();
 using (var serviceScope = app.Services.CreateScope())
 {
@@ -55,7 +60,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseNToastNotify();
 app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
