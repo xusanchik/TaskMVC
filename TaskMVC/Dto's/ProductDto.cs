@@ -1,4 +1,6 @@
-﻿namespace TaskMVC.Dto_s
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TaskMVC.Dto_s
 {
     public class ProductDto
     {

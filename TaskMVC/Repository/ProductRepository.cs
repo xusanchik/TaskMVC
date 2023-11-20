@@ -55,6 +55,7 @@ public class ProductRepository:IProductRepository
 
     public async Task<Product> CreateAudit(Product newProduct, Product oldProduct, string actionType, User user)
     {
+
         var auditTrailRecord = new AuditLog
         {
             UserName = user.UserName,

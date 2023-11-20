@@ -34,7 +34,6 @@ public class AuditRepository:IAuditRepository
             .AsEnumerable()
             .Where(log => log.UserName.Equals(name, StringComparison.OrdinalIgnoreCase))
             .ToList();
-
         return auditLogs;
     }
 

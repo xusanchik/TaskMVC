@@ -1,31 +1,49 @@
 ﻿@model TaskMVC.Entity.AuditLogViewModel
+
 @{
     ViewBag.Title = "Audit Log Table";
 }
+<style>
+    .qwert{
+       display:inline-flex;
+       padding: 10px
+    }
+    .btn-secondary{
+        margin-left: 30PX;
+    }
 
+
+
+</style>
 <div class="d-xl-flex justify-content-between my-3">
     <h2>Audit Log Table</h2>
     <div class="audit-filter-form d-xl-flex gap-3">
-        @using (Html.BeginForm("Index", "AuditView", FormMethod.Get))
-        {
-            <div>
-                <label for="Name">User name</label>
-                <input type="text" id="Name" name="Name" value="@Model.Name" />
-            </div>
-
-            <div>
-                <label for="FromDate">From Date:</label>
-                <input type="date" id="FromDate" name="fromDate" value="@Model.FromDate.ToString("yyyy-MM-dd")" />
-            </div>
-
-            <div>
-                <label for="ToDate">To Date:</label>
-                <input type="date" id="ToDate" name="toDate" value="@Model.ToDate.ToString("yyyy-MM-dd")" />
-            </div>
-
-            <button type="submit" class="btn btn-secondary">Filter</button>
-        }
     </div>
+</div>
+<div>
+
+
+        @using (Html.BeginForm("Index", "AuditViuw", FormMethod.Get))
+        {
+            <ul class="qwert">
+                <div>
+                    <label for="Name">User name</label>
+                    <input type="text" id="Name" name="Name" value="@Model.Name" />
+                </div>
+
+                <div>
+                    <label for="FromDate">From Date:</label>
+                    <input type="date" id="FromDate" name="fromDate" value="@Model.FromDate.ToString("yyyy-MM-dd")" />
+                </div>
+
+                <div>
+                    <label for="ToDate">To Date:</label>
+                    <input type="date" id="ToDate" name="toDate" value="@Model.ToDate.ToString("yyyy-MM-dd")" />
+                </div>
+                <br>
+                <button type="submit" class="btn-secondary">Filter</button>
+            </ul>
+        }
 </div>
 
 <div class="table-responsive">

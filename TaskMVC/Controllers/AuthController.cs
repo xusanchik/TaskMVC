@@ -33,11 +33,14 @@ namespace TaskMVC.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _notification.AddErrorToastMessage("Not Found ");
                 return View(loginDto);
             }
-            if(loginDto.Email == null)
+            if(loginDto.Email == null || loginDto.Password == null)
             {
+
                 return RedirectToAction("Login", "Auth");
+
             }
 
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -52,35 +55,31 @@ namespace TaskMVC.Controllers
                         var rol = await _userManager.GetRolesAsync(user);
                         foreach (var rolle in rol)
                         {
-                            if (rolle == "ADMIN")
+                            if (rolle == "ADMIN" || rolle == "USER")
                             {
-                                _notification.AddSuccessToastMessage("ADMIN!");
+                                _notification.AddSuccessToastMessage("ADMIN");
                                 return RedirectToAction("Index2", "Product");
-                            }
-                            if (rolle == "USER")
-                            {
-                                
-                                return RedirectToAction("Index", "Product");
 
                             }
+                        
                         }
 
                     }
                 }
-                TempData["Error"] = "Parol noto'g'ri";
-                return View(loginDto);
-            }
+                else
+                {
+                    return RedirectToAction("Login", "Auth");
 
-            TempData["Error"] = "Foydalanuvchi topilmadi";
+                }
+            }
             return RedirectToAction("Login", "Auth");
         }
-
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register()
         {
             var response = new RegisterDto();
             return View(response);
         }
-
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
@@ -107,11 +106,13 @@ namespace TaskMVC.Controllers
                 if (registerDto.Role == 0)
                 {
                     await _userManager.AddToRoleAsync(newUser, ERole.ADMIN.ToString());
-                    return RedirectToAction("Login", "Auth");
+                    return  RedirectToAction("Login", "Auth");
                 }
                 else
                 {
                     await _userManager.AddToRoleAsync(newUser, ERole.USER.ToString());
+                    _notification.AddSuccessToastMessage("Registration successfully!");
+
                     return RedirectToAction("Login", "Auth");
                 }
             }

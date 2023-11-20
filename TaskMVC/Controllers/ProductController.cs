@@ -11,6 +11,8 @@ using MimeKit;
 using MailKit.Security;
 using MimeKit.Text;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
+using Microsoft.AspNetCore.Authorization;
+
 namespace TaskMVC.Controllers;
 
 public class ProductController : Controller
@@ -33,31 +35,19 @@ public class ProductController : Controller
         foreach (var product in alresult)
         {
             product.TotolPrice = (product.Price * product.Quantiy) * (1 + 0.1);
-            product.TotolPrice = Math.Floor(product.TotolPrice);
             await _appDbContext.SaveChangesAsync();
 
         }
         return View(alresult);
     }
-    public async Task<IActionResult> Index()
-    {
-
-        var alresult = await _appDbContext.Products.ToListAsync();
-        foreach (var product in alresult)
-        {
-            product.TotolPrice = (product.Price * product.Quantiy) * (1 + 0.1);
-            product.TotolPrice = Math.Floor(product.TotolPrice);
-            await _appDbContext.SaveChangesAsync();
 
 
-        }
-        return View(alresult);
-    }
     public async Task<IActionResult> AddProduct()
     {
         return View();
     }
     [HttpPost]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> AddProduct([Bind("Id,Title,Quantiy,Price")] Product product)
     {
         if (!ModelState.IsValid) return View(product);
@@ -65,19 +55,19 @@ public class ProductController : Controller
         var user = await _userManager.GetUserAsync(HttpContext.User);
         await _productRepository.CreateProductAsync(product);
         _notification.AddSuccessToastMessage( "Create Product!");
+        product.TotolPrice = (product.Quantiy * product.Price) * (1 + 0.1);
+
         await _productRepository.CreateAudit(product, null, "Create", user);
 
         var alresult = await _appDbContext.Products.ToListAsync();
         foreach (var produc in alresult)
         {
             produc.TotolPrice = (produc.Price * produc.Quantiy) * (1 + 0.1);
-            produc.TotolPrice = Math.Floor(produc.TotolPrice);
             await _appDbContext.SaveChangesAsync();
 
         }
         return View("Index2",alresult );
     }
-
     [HttpPost]
     public async Task<IActionResult> DeleteProduct(int id)
     {
@@ -96,11 +86,14 @@ public class ProductController : Controller
         var allproduct = await _appDbContext.Products.ToListAsync();
         return View("Index2", allproduct);
     }
+    [Authorize(Roles = "ADMIN")]
     public IActionResult UpdateProduct()
     {
         return View("UpdateProduct");
     }
     [HttpPost]
+    [Authorize(Roles ="ADMIN")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateProduct(int id, [Bind("Id,Title,Quantiy,Price")] Product product)
     {
         if (id != product.Id) return NotFound();
@@ -113,6 +106,7 @@ public class ProductController : Controller
             var oldProduct = await _productRepository.GetOldValueAsync(id);
             var newProduct = await _productRepository.UpdateProductAsync(product);
             _notification.AddSuccessToastMessage("Update Product!");
+            newProduct.TotolPrice = (newProduct.Quantiy * newProduct.Price) * (1 + 0.1);
             await _productRepository.CreateAudit(newProduct, oldProduct, "Edit", user);
         }
         catch (DbUpdateConcurrencyException)
@@ -127,9 +121,7 @@ public class ProductController : Controller
         foreach (var produc in alresult)
         {
             produc.TotolPrice = (produc.Price * produc.Quantiy) * (1 + 0.1);
-            produc.TotolPrice = Math.Floor(produc.TotolPrice);
             await _appDbContext.SaveChangesAsync();
-
         }
         return View("Index2", alresult);
 

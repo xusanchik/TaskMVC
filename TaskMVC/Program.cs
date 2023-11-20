@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "CrudNewMVC API",
+        Title = "TaskMVC",
         Version = "v1"
     });
 });
@@ -62,6 +62,26 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseNToastNotify();
 app.UseAuthorization();
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/swagger"))
+    {
+        if (context.User.Identity.IsAuthenticated)
+        {
+            if (!context.User.IsInRole("ADMIN"))
+            {
+                context.Response.StatusCode = 403;
+                return;
+            }
+        }
+        else
+        {
+            context.Response.Redirect("/Account/Login");
+            return;
+        }
+    }
+    await next.Invoke();
+});
 app.UseSwagger();
 app.UseSwaggerUI();
 
